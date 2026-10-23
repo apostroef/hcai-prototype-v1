@@ -1,224 +1,47 @@
-PERTAMINA DIGITAL HUB GUIDELINES
-================================
-
-Overview
---------
-This web application is a guidebook hub for exploring Pertamina Digital Hub
-design, UX, and human-centered AI (HCAI) guidance.
-
-The application contains:
-
-- HCAI Design Library
-- UI Guidelines
-- UX Flow guidance
-- Floating Pertamina Copilot chatbot
-
-
-Opening the Web App
--------------------
-When the app opens, the landing page displays the available guidebooks.
-
-Select a guidebook card to open it:
-
-- HCAI Design Library
-- UI Guidelines
-- UX Flow
-
-Use the back navigation provided at the top of each page to return to the
-previous guidebook level or the main page.
-
-
-UI Guidelines
--------------
-The UI Guidelines area is organized into categories:
-
-- Identity
-- Design Standards
-- UI Patterns
-
-Breadcrumb navigation
-~~~~~~~~~~~~~~~~~~~~~
-When viewing a UI guideline page, the header displays breadcrumbs:
-
-    All guidebooks > [Category]
-
-Select the category breadcrumb to open a dropdown and switch between:
-
-- Identity
-- Design Standards
-- UI Patterns
-
-Page navigation
-~~~~~~~~~~~~~~~
-Categories with multiple pages display a side navigation rail instead of an
-accordion. For example, Design Standards contains:
-
-- Color System
-- Typography
-- Iconography
-
-Select a page in the side rail to switch pages.
-
-On this page
-~~~~~~~~~~~~
-The active page contains an indented "On this page" subsection with links to
-its sections.
-
-For example, Color System contains:
-
-- Palette
-- Color usage by function
-- Color tokens
-
-Select a section link to jump directly to that section.
-
-
-UX Flow
--------
-The UX Flow guidebook contains UX process topics and supporting guidance.
-
-Select a topic from the available navigation to view its:
-
-- Description
-- Introduction
-- Process sections
-- Supporting lists and tables
-
-Use the back button to return to the UX Flow landing view or the main
-guidebook hub.
-
-
-HCAI Design Library
--------------------
-The HCAI Design Library can be filtered by:
-
-- Goals
-- Guidelines
-- Principles
-- Product context
-- Capabilities
-
-Multiple filters can be selected at the same time. Matching feature examples
-are displayed in the results area.
-
-Use "Clear all" to remove active filters.
-
-Select a guideline or feature example to view additional details.
-
-
-Pertamina Copilot
------------------
-The Copilot is a dummy chatbot interface for demonstrating how an assistant
-could support users while they browse the guidebooks.
-
-Opening the Copilot
-~~~~~~~~~~~~~~~~~~~
-Select the floating Copilot icon in the bottom-right corner of the screen.
-
-The chat drawer includes:
-
-- Pertamina Copilot identity and status
-- Knowledge and context pills:
-  - UI Guidelines
-  - UX Flow
-  - HCAI
-- HCAI-focused starter questions
-- Message composer
-- Send button
-
-Starter questions
-~~~~~~~~~~~~~~~~~
-Example questions include:
-
-- How do I achieve a reliable design for a Dashboard AI product?
-- What HCAI principles should guide an AI dashboard?
-- How can I make an AI product feel trustworthy and easy to use?
-
-Select a starter question to place it in the message composer.
-
-Sending messages
-~~~~~~~~~~~~~~~~
-Type a message into the composer and select the send button.
-
-You can also press Enter to send a message. Use Shift+Enter to create a new
-line.
-
-The chatbot is currently a visual and interaction prototype. It does not
-connect to a real AI service, retrieve live knowledge, or generate actual
-answers.
-
-Expanded Copilot mode
-~~~~~~~~~~~~~~~~~~~~~
-Select the expand icon in the Copilot header to enlarge the experience.
-
-On desktop screens, expanded mode changes the layout to:
-
-- Guidebook content on the left
-- A full-height Copilot panel on the right
-
-This allows the user to browse the guidebook while keeping the Copilot panel
-visible.
-
-Select the collapse icon to return to the compact floating drawer.
-Select the close button, the floating Copilot icon, or press Escape to close
-the chat.
-
-On small screens, the Copilot remains a responsive overlay so that it fits
-within the viewport.
-
-
-Local Development
------------------
-Requirements:
-
-- Node.js
-- npm
-
-Install dependencies:
-
-    npm install
-
-Start the development server:
-
-    npm run dev
-
-Create a production build:
-
-    npm run build
-
-Preview the production build:
-
-    npm run preview
-
-Format the project:
-
-    npm run format
-
-
-Project Entry Points
---------------------
-
-- src/main.tsx
-  React entry point that mounts the application.
-
-- src/App.tsx
-  Main application routing, landing pages, HCAI library, and Copilot chat.
-
-- src/UI-content.tsx
-  UI Guidelines content, breadcrumb navigation, page rail, and section links.
-
-- src/UX-content.tsx
-  UX Flow content and topic navigation.
-
-- src/index.css
-  Global styles, responsive layout, UI guideline navigation, and Copilot
-  styling.
-
-
-Notes
------
-- The application is a client-side React application.
-- Page navigation is handled in application state rather than a server-side
-  router.
-- Copilot content is dummy content intended for interface demonstration.
-- The application uses React, Vite, Tailwind CSS, TypeScript, and oxfmt.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pertamina Digital Hub Guidelines</title>
+</head>
+<body>
+
+    <h1>Pertamina Digital Hub Guidelines</h1>
+    <p>This web application is a central hub for exploring Pertamina's design, UX, and Human-Centered AI (HCAI) guidelines.</p>
+
+    <h2>📚 Guidebooks</h2>
+    <p>Navigate the app using the main landing page to access three core libraries:</p>
+    <ul>
+        <li><strong>HCAI Design Library:</strong> Search and filter AI guidelines by goals, context, and capabilities.</li>
+        <li><strong>UI Guidelines:</strong> Browse Identity, Design Standards, and UI Patterns (includes breadcrumb and side-rail navigation).</li>
+        <li><strong>UX Flow:</strong> Step-by-step UX processes and supporting documentation.</li>
+    </ul>
+
+    <h2>🤖 Pertamina Copilot</h2>
+    <p>A prototype chatbot located in the bottom-right corner to help users browse the guidebooks.</p>
+    <ul>
+        <li>Includes context pills and starter questions (e.g., "How do I achieve a reliable design?").</li>
+        <li>Supports an expanded side-by-side desktop view.</li>
+        <li><em>Note: This is currently a visual prototype and does not connect to a live AI backend.</em></li>
+    </ul>
+
+    <h2>💻 Local Development</h2>
+    <p>Requires Node.js and npm. Run the following commands in your terminal:</p>
+    <pre><code>
+npm install      <!-- Install dependencies -->
+npm run dev      <!-- Start development server -->
+npm run build    <!-- Create production build -->
+npm run preview  <!-- Preview production build -->
+npm run format   <!-- Format the project files -->
+    </code></pre>
+
+    <h2>📂 Project Structure & Tech Stack</h2>
+    <ul>
+        <li><code>src/main.tsx</code> & <code>src/App.tsx</code>: Main entry points, state-based routing, and layout.</li>
+        <li><code>src/UI-content.tsx</code> & <code>src/UX-content.tsx</code>: Content data for the guidebooks.</li>
+        <li><code>src/index.css</code>: Global styles and responsive layouts.</li>
+        <li><strong>Stack:</strong> Client-side React, Vite, Tailwind CSS, TypeScript, and oxfmt.</li>
+    </ul>
+
+</body>
+</html>
