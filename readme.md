@@ -37,6 +37,37 @@ npm run preview
 npm run format
 ```
 
+## 🌐 GitHub Pages Deployment
+
+The project is configured for the repository URL:
+
+`https://apostroef.github.io/hcai-prototype-v1/`
+
+The GitHub Pages build uses `/hcai-prototype-v1/` as its Vite base path so
+JavaScript, CSS, and other assets resolve correctly when the site is hosted
+under the repository subpath.
+
+Build the Pages-ready output locally:
+
+```bash
+npm run build:pages
+```
+
+The generated files are placed in `dist/`.
+
+The repository also includes a GitHub Actions workflow at
+`.github/workflows/deploy-pages.yml`. It builds and deploys the site whenever
+changes are pushed to the `main` branch.
+
+In the repository settings, configure:
+
+1. **Settings > Pages > Source:** GitHub Actions
+2. Push the changes to the `main` branch.
+
+The site will then be available at:
+
+`https://apostroef.github.io/hcai-prototype-v1/`
+
 ## 📁 Project Structure
 
 Here are the main entry points and structural files for the project:
