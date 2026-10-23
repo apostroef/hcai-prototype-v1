@@ -1,8 +1,6 @@
-# 📖 Pertamina Digital Hub Guidelines
+# HCAI Prototype
 
-A centralized web application for exploring Pertamina Digital Hub's design, UX, and human-centered AI (HCAI) guidance. 
-
-## ✨ Key Features
+## Key Features
 
 This guidebook hub is divided into four main sections, accessible right from the landing page:
 
