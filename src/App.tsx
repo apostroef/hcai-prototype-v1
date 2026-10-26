@@ -487,7 +487,7 @@ function GuidelinesPage({
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,520px)] lg:items-end">
           <h1 className="max-w-4xl text-5xl leading-[0.98] font-semibold tracking-[-0.055em] text-[#082542] sm:text-6xl lg:text-[5.4rem]">
-            Guidelines for
+            Principles for
             <br />
             responsible AI.
           </h1>
@@ -857,7 +857,7 @@ function MainPage({
     {
       title: "Guidelines for HCAI",
       description:
-        "Explore practical principles for creating reliable, safe, and trustworthy AI experiences.",
+        "Explore practical principles for creating reliable, safe, and trustworthy AI experiences and the corresponding design guidelines",
       label: "Guidelines",
       page: "guidelines" as Page,
       accent: "01",
