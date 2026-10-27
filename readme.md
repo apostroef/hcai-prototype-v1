@@ -41,7 +41,7 @@ npm run format
 
 The project is configured for the repository URL:
 
-`https://apostroef.github.io/hcai-prototype-v1/`
+`https://apostroef.github.io/https---github.com-apostroef-hcai-prototype/`
 
 The GitHub Pages build uses `/hcai-prototype-v1/` as its Vite base path so
 JavaScript, CSS, and other assets resolve correctly when the site is hosted
@@ -66,7 +66,7 @@ In the repository settings, configure:
 
 The site will then be available at:
 
-`https://apostroef.github.io/hcai-prototype-v1/`
+`https://apostroef.github.io/https---github.com-apostroef-hcai-prototype/`
 
 ## 📁 Project Structure
 

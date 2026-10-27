@@ -857,7 +857,7 @@ function MainPage({
     {
       title: "Guidelines for HCAI",
       description:
-        "Explore practical principles for creating reliable, safe, and trustworthy AI experiences and the corresponding design guidelines",
+        "Explore practical principles for creating reliable, safe, and trustworthy AI experiences and the corresponding design guidelines.",
       label: "Guidelines",
       page: "guidelines" as Page,
       accent: "01",
