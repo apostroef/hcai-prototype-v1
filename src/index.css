@@ -919,6 +919,10 @@ button {
     gap: 12px;
 }
 
+.filter-mobile-header {
+    display: none;
+}
+
 .filter-panel-actions,
 .products-heading-actions {
     display: flex;
@@ -1600,6 +1604,9 @@ button {
             background: #006cb8;
         }
         .filter-toggle-button {
+            width: fit-content;
+            justify-content: flex-start;
+            gap: 8px;
             border: 1px solid #9bc9e6;
             padding: 6px 14px;
             color: #005a9d;
@@ -1629,6 +1636,16 @@ button {
     .library-layout {
         display: block;
     }
+    .filter-mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .filter-desktop-header {
+        display: none;
+    }
     .filter-panel {
         position: fixed;
         z-index: 20;
@@ -1641,7 +1658,19 @@ button {
         border: 0;
         border-radius: 0;
         box-shadow: 12px 0 36px rgb(8 37 66 / 18%);
-        transform: translateX(-105%);
+        transform: translateX(-100%);
+        transition: transform 220ms ease;
+    }
+    .filter-panel.is-open {
+        transform: translateX(0);
+    }
+    .filter-drawer-backdrop {
+        position: fixed;
+        z-index: 19;
+        inset: 0;
+        display: block;
+        border: 0;
+        background: rgb(8 37 66 / 38%);
     }
     .filter-panel::-webkit-scrollbar,
     .guideline-sidebar::-webkit-scrollbar {

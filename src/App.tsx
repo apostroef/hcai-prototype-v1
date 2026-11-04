@@ -568,6 +568,19 @@ function ChevronIcon() {
   )
 }
 
+function MenuIcon() {
+  return (
+    <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 20 20">
+      <path
+        d="M3.5 5.5h13m-13 4.5h13m-13 4.5h13"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  )
+}
+
 function PageHeader({
   breadcrumbs,
 }: {
@@ -2157,6 +2170,8 @@ function DesignLibraryPage({
 
   const [activeProduct, setActiveProduct] = useState<string | null>(null)
 
+  const [filterOpen, setFilterOpen] = useState(false)
+
   const [activeFeature, setActiveFeature] = useState<{
     capability: string
 
@@ -2378,8 +2393,41 @@ function DesignLibraryPage({
           activeProduct ? "" : "lg:grid-cols-[310px_minmax(0,1fr)]"
         }`}
       >
-        {!activeProduct && <aside className="filter-panel">
-          <div className="flex items-center justify-between gap-4">
+        {!activeProduct && (
+          <button
+            className="filter-toggle-button"
+            onClick={() => setFilterOpen(true)}
+            type="button"
+          >
+            <MenuIcon />
+            Filter
+          </button>
+        )}
+        {!activeProduct && (
+          <>
+            {filterOpen && (
+              <button
+                aria-label="Close filter panel"
+                className="filter-drawer-backdrop"
+                onClick={() => setFilterOpen(false)}
+                type="button"
+              />
+            )}
+            <aside className={`filter-panel ${filterOpen ? "is-open" : ""}`}>
+              <div className="filter-mobile-header">
+                <h2 className="text-lg font-semibold tracking-[-0.02em]">
+                  Refine results
+                </h2>
+                <button
+                  aria-label="Close filter panel"
+                  className="filter-close-button"
+                  onClick={() => setFilterOpen(false)}
+                  type="button"
+                >
+                  Close
+                </button>
+              </div>
+          <div className="filter-desktop-header flex items-center justify-between gap-4">
             <h2 className="text-lg font-semibold tracking-[-0.02em]">
               Refine results
             </h2>
@@ -2618,7 +2666,9 @@ function DesignLibraryPage({
               </div>
             </fieldset>
           </details>
-        </aside>}
+            </aside>
+          </>
+        )}
 
         <div>
           {activeProduct === "Dashboard" ? (
