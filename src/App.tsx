@@ -1,4 +1,10 @@
-import { useEffect, useState, type ReactNode } from "react"
+import {
+  useEffect,
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from "react"
 
 import ArrowIcon from "./arrow-icon"
 
@@ -839,6 +845,10 @@ function GuidelinesPage({
   const [activeGuidelineId, setActiveGuidelineId] = useState<string | null>(
     null,
   )
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([])
+  const [selectedPrinciples, setSelectedPrinciples] = useState<string[]>([])
+  const [selectedGuidelines, setSelectedGuidelines] = useState<string[]>([])
+  const [filterOpen, setFilterOpen] = useState(false)
 
   const guidelineEntries = guidelines.map((guideline) => ({
     category: guideline.goals.join(" · "),
@@ -849,6 +859,38 @@ function GuidelinesPage({
   const activeGuideline = guidelineEntries.find(
     (entry) => entry.guideline.id === activeGuidelineId,
   )
+
+  const toggleSelection = (
+    value: string,
+    setter: Dispatch<SetStateAction<string[]>>,
+  ) => {
+    setter((current) =>
+      current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value],
+    )
+  }
+
+  const displayedGuidelines = guidelines.filter((guideline) => {
+    const matchesGoals =
+      selectedGoals.length === 0 ||
+      selectedGoals.some((goal) => guideline.goals.includes(goal))
+    const matchesPrinciples =
+      selectedPrinciples.length === 0 ||
+      selectedPrinciples.includes(guideline.id)
+    const matchesNestedGuidelines =
+      selectedGuidelines.length === 0 ||
+      guideline.patterns.some((pattern) =>
+        selectedGuidelines.includes(getPrincipleFilterId(guideline.id, pattern)),
+      )
+
+    return matchesGoals && matchesPrinciples && matchesNestedGuidelines
+  })
+
+  const hasFilters =
+    selectedGoals.length > 0 ||
+    selectedPrinciples.length > 0 ||
+    selectedGuidelines.length > 0
 
   if (activeGuideline) {
     return (
@@ -882,13 +924,13 @@ function GuidelinesPage({
           <span className="h-2.5 w-2.5 rounded-full bg-[#006cb8]" />
           Human-centered AI
         </div>
-        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,520px)] lg:items-end">
+        <div className="mt-8 max-w-5xl">
           <h1 className="max-w-4xl text-5xl leading-[0.98] font-semibold tracking-[-0.055em] text-[#082542] sm:text-6xl lg:text-[5.4rem]">
             Principles for
             <br />
             responsible AI.
           </h1>
-          <p className="max-w-xl border-l border-[#a9cde8] pl-5 text-base leading-7 text-[#49647d] lg:mb-1">
+          <p className="mt-6 max-w-3xl border-l border-[#a9cde8] pl-5 text-base leading-7 text-[#49647d]">
             Principles for creating reliable, safe, and trustworthy AI
             experiences that keep people at the center of every decision.
           </p>
@@ -899,13 +941,116 @@ function GuidelinesPage({
         aria-label="AI guidelines"
         className="mx-auto max-w-[1480px] px-5 pb-16 sm:px-8 lg:px-12 lg:pb-24"
       >
-        <div className="overflow-hidden rounded-[28px] border border-[#bfd8eb] bg-[#89b9dc] shadow-[0_24px_70px_rgba(0,63,110,0.10)]">
-          <div className="grid gap-px md:grid-cols-2 xl:grid-cols-3">
-            {guidelines.map((guideline, index) => (
+        <div className="principles-mobile-toolbar">
+          <span>
+            {displayedGuidelines.length} of {guidelines.length} principles shown
+          </span>
+          <button
+            className="principles-filter-toggle"
+            onClick={() => setFilterOpen(true)}
+            type="button"
+          >
+            Filter
+          </button>
+        </div>
+        {filterOpen && (
+          <button
+            aria-label="Close principles filter"
+            className="principles-filter-backdrop"
+            onClick={() => setFilterOpen(false)}
+            type="button"
+          />
+        )}
+        <div className="principles-layout">
+          <aside
+            className={`principles-filter-panel ${filterOpen ? "is-open" : ""}`}
+          >
+            <div className="principles-filter-heading">
+              <div>
+                <h2>Filter principles</h2>
+                <span className="principles-filter-count">
+                  {displayedGuidelines.length} of {guidelines.length} shown
+                </span>
+              </div>
+              {hasFilters && (
+                <button
+                  onClick={() => {
+                    setSelectedGoals([])
+                    setSelectedGuidelines([])
+                  }}
+                  type="button"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
+            <button
+              aria-label="Close principles filter"
+              className="principles-filter-close"
+              onClick={() => setFilterOpen(false)}
+              type="button"
+            >
+              Close
+            </button>
+
+            <fieldset>
+              <legend>Goals</legend>
+              <div className="principles-filter-pills">
+                {hcaiGoals.map((goal) => (
+                  <button
+                    className={selectedGoals.includes(goal) ? "is-selected" : ""}
+                    onClick={() => toggleSelection(goal, setSelectedGoals)}
+                    type="button"
+                    key={goal}
+                  >
+                    {goal}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Guidelines</legend>
+              {guidelines.map((guideline) => (
+                <div className="principles-filter-group" key={guideline.id}>
+                  <strong>{guideline.title}</strong>
+                  <div className="principles-filter-nested-options">
+                    {guideline.patterns.map((pattern) => {
+                      const filterId = getPrincipleFilterId(
+                        guideline.id,
+                        pattern,
+                      )
+
+                      return (
+                        <label className="principles-filter-option" key={filterId}>
+                          <input
+                            checked={selectedGuidelines.includes(filterId)}
+                            onChange={() =>
+                              toggleSelection(
+                                filterId,
+                                setSelectedGuidelines,
+                              )
+                            }
+                            type="checkbox"
+                          />
+                          <span>{pattern}</span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+            </fieldset>
+          </aside>
+
+          <div className="principles-results">
+            <div className="overflow-hidden rounded-[28px] border border-[#bfd8eb] bg-[#89b9dc] shadow-[0_24px_70px_rgba(0,63,110,0.10)]">
+              <div className="grid gap-px md:grid-cols-2 xl:grid-cols-3">
+            {displayedGuidelines.map((guideline) => (
               <GuidelineCard
                 guideline={guideline}
                 key={guideline.title}
-                number={index + 1}
+                number={guidelines.indexOf(guideline) + 1}
                 disabled={guideline.id !== "user-experience"}
                 onOpen={() => {
                   setActiveGuidelineId(guideline.id)
@@ -914,6 +1059,13 @@ function GuidelinesPage({
                 }}
               />
             ))}
+              </div>
+            </div>
+            {displayedGuidelines.length === 0 && (
+              <p className="principles-empty-state">
+                No principles match the selected filters.
+              </p>
+            )}
           </div>
         </div>
       </section>
