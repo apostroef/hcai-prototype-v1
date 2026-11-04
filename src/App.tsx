@@ -6,6 +6,17 @@ import UIContent from "./UI-content"
 
 import UXContent from "./UX-content"
 
+import dashboardContextAvoidImage from "../assets/06498.png"
+import feedbackDoImage from "../assets/84f61.png"
+import dashboardUsabilityDoImage from "../assets/85016.png"
+import contextAvoidImage from "../assets/9b335.png"
+import dashboardUsabilityAvoidImage from "../assets/a4ba4.png"
+import contextDoImage from "../assets/ad8ba.png"
+import feedbackAvoidImage from "../assets/b1dea.png"
+import dashboardContextDoImage from "../assets/bd38a.png"
+import usabilityAvoidImage from "../assets/c357f.png"
+import usabilityDoImage from "../assets/e4642.png"
+
 type Guideline = {
   id: string
 
@@ -23,14 +34,10 @@ const hcaiGoals = ["Reliability", "Safety", "Trustworthiness"]
 const guidelines: Guideline[] = [
   {
     id: "user-experience",
-
     title: "User Experience",
-
     description:
       "Create AI experiences that understand the user’s context, remain easy to use, and provide meaningful feedback throughout the interaction.",
-
     patterns: ["Context-Awareness", "Usability", "Feedback"],
-
     goals: ["Reliability"],
   },
 
@@ -355,18 +362,131 @@ const principleGuidance: Record<string, {
   },
 }
 
+type GuidelineKey = "context" | "usability" | "feedback"
+
+type GuidelineContent = {
+  label: string
+  title: string
+  intro: string[]
+  pattern: string[]
+  doImage: string
+  avoidImage: string
+  doItems: string[]
+  avoidItems: string[]
+  references: string[]
+}
+
+const guidelineContent: Record<GuidelineKey, GuidelineContent> = {
+  context: {
+    label: "Context-Aware",
+    title: "Set expectations for adaptation",
+    intro: [
+      "Context-awareness is the capacity of an AI system to use information about a user’s situation to adapt what it presents or does [1] [2]. Designers should set expectations for adaptation by telling users in advance what the system will learn from their context and how its behavior will change over time, so that adaptation feels predictable rather than surprising [5].",
+      "Context-aware behavior should also be grounded in an understood and specified context of use to make AI feel relevant [3]. Good relevance design makes complex AI feel simple by hiding unnecessary complexity [5].",
+    ],
+    pattern: [
+      "Practical patterns for designing context-aware AI that makes its inputs, reasoning, and limitations clear. AI systems learn from their environments. Sometimes, they keep track of whether or not an output was useful and adapt accordingly.",
+      "Clarify how input influences results. Don’t forget to communicate changes in accuracy as conditions change [5].",
+    ],
+    doImage: contextDoImage,
+    avoidImage: contextAvoidImage,
+    doItems: [
+      "“How this panel adapts” says what it uses and how behavior will change over time. It has Manage and Turn off actions. It appears before the system adapts.",
+      "Add sources so users can see what the AI is reading and change it.",
+      "Apply progressive disclosure where only relevant readings are shown.",
+    ],
+    avoidItems: [
+      "Persona branding replaces the functional title. This sets a wrong expectation and creates a black box.",
+      "Missing explanation because there is no basis, confidence value, or info icon.",
+      "A dense list of nine sensor rows is shown with no context.",
+    ],
+    references: [
+      "[1] Dey, A. K. (2001). Understanding and using context. Personal and Ubiquitous Computing, 5(1), 4–7.",
+      "[2] Göbels, V. P., et al. (2026). Aligning AI with human values: Design principles for human-centered AI.",
+      "[3] International Organization for Standardization. (2020). Ergonomics of human-system interaction — Part 110.",
+      "[4] Kore, A. (2022). Designing human-centric AI experiences.",
+    ],
+  },
+  usability: {
+    label: "Usability",
+    title: "Support effective and easy-to-learn operation",
+    intro: [
+      "Usability describes how easy and pleasant a product’s features are to use [4]. It extends to the degree to which specific users can reach specific goals with a system, product, or service effectively, efficiently, and with satisfaction [1][2].",
+      "Interfaces should be intuitive, easy to understand, and easy to navigate, so people can find AI features and make sense of them without specialist knowledge. These features should also be easy to learn and efficient to use in real work [1].",
+    ],
+    pattern: [
+      "AI outputs can be uncertain, can differ from one attempt to the next, and can be wrong. Usability should put clarity, trust, and user control first [3]. Marking AI-generated content with a subtle but distinct cue helps people recognize it right away [3][5].",
+      "People should also be able to undo actions, leave a state they did not want, and stay in charge throughout. The design should always let them override the AI [5].",
+    ],
+    doImage: usabilityDoImage,
+    avoidImage: usabilityAvoidImage,
+    doItems: [
+      "“Ask AI” sits in the header, next to search, in the same place on every page.",
+      "The panel opens as a dropdown anchored to the button.",
+      "Input has a visible label, placeholder, and suggested questions in everyday language.",
+      "A “Talk to a person” link is always shown.",
+    ],
+    avoidItems: [
+      "Header has no AI entry, current-page indicator, or breadcrumb.",
+      "It says nothing about what it can or can’t do, and quick actions use jargon.",
+      "The close button and text are tiny, and there is no way to reach a person.",
+    ],
+    references: [
+      "Göbels, V. P., et al. (2026). Aligning AI with human values.",
+      "International Organization for Standardization. (2018). Usability: Definitions and concepts.",
+      "Joseph, A. M. (2026). Designing for AI features: 6 UX principles.",
+      "Nielsen, J. (2012). Usability 101: Introduction to usability.",
+    ],
+  },
+  feedback: {
+    label: "Feedback",
+    title: "Provide users with an efficient, flexible, and positive feedback-giving experience",
+    intro: [
+      "Feedback involves gathering, analyzing, and applying user input to enhance a system’s intelligence. This process, which is always initiated by the user, effectively allows them to teach the AI [1], [2]. Feedback mechanisms must be seamless and never disrupt the user’s primary workflow.",
+      "Users are driven to provide feedback for various reasons. Designers can tie internal feedback mechanisms directly into the product’s reward systems [2].",
+    ],
+    pattern: [
+      "Make feedback entry points highly visible and inviting. Use appreciative language that explains how providing input benefits the user.",
+      "Offer flexible engagement options and provide clear system status signals confirming submission and explaining how the data will be used.",
+    ],
+    doImage: feedbackDoImage,
+    avoidImage: feedbackAvoidImage,
+    doItems: [
+      "Floating panel directly next to the AI feature, easily dismissible.",
+      "Clearly states how the user benefits from helping.",
+      "Binary choices, quick chips, or detailed text.",
+      "Explains what happens to the data and notes.",
+    ],
+    avoidItems: [
+      "Screen-blocking modal that stops the user workflow.",
+      "Demanding language with no clear benefit to the user.",
+      "Forces users to write detailed text with no quick options.",
+      "Vague wording about where the data goes.",
+    ],
+    references: [
+      "SAP, “Feedback loop in intelligent systems,” SAP Fiori Design Guidelines.",
+      "A. Kore, Designing Human-Centric AI Experiences.",
+      "A. Frik et al. (2026). arXiv preprint.",
+    ],
+  },
+}
+
 function GuidelineCard({
   guideline,
 
   number,
 
   onOpen,
+
+  disabled = false,
 }: {
   guideline: Guideline
 
   number: number
 
   onOpen?: () => void
+
+  disabled?: boolean
 }) {
   const content = (
     <>
@@ -404,10 +524,10 @@ function GuidelineCard({
   return (
     <article
       className={`guideline-card group ${
-        onOpen ? "guideline-card-interactive" : ""
-      }`}
+        onOpen && !disabled ? "guideline-card-interactive" : ""
+      } ${disabled ? "guideline-card-disabled" : ""}`}
     >
-      {onOpen && (
+      {onOpen && !disabled && (
         <button
           aria-label={`Open guideline: ${guideline.title}`}
           className="guideline-card-link"
@@ -448,6 +568,102 @@ function ChevronIcon() {
   )
 }
 
+function PageHeader({
+  breadcrumbs,
+}: {
+  breadcrumbs: Array<{
+    label: string
+    onClick?: () => void
+  }>
+}) {
+  return (
+    <header className="page-navigation-header">
+      <div className="page-navigation-inner">
+        <nav aria-label="Breadcrumb" className="page-breadcrumbs">
+          {breadcrumbs.map((breadcrumb, index) => (
+            <span className="page-breadcrumb-part" key={`${breadcrumb}-${index}`}>
+              {index > 0 && <span aria-hidden="true">{">"}</span>}
+              {breadcrumb.onClick ? (
+                <button onClick={breadcrumb.onClick} type="button">
+                  {breadcrumb.label}
+                </button>
+              ) : (
+                <span aria-current={index === breadcrumbs.length - 1 ? "page" : undefined}>
+                  {breadcrumb.label}
+                </span>
+              )}
+            </span>
+          ))}
+        </nav>
+      </div>
+    </header>
+  )
+}
+
+function DetailedGuidelineSection({
+  content,
+  number,
+}: {
+  content: GuidelineContent
+  number: number
+}) {
+  return (
+    <article className="design-guideline">
+      <span className="design-guideline-number">
+        {String(number).padStart(2, "0")}
+      </span>
+      <div>
+        <h4 className="text-lg font-semibold text-[#006cb8]">
+          {content.label}
+        </h4>
+        <h5 className="mt-2 text-2xl font-bold tracking-[-0.03em] text-[#082542] sm:text-3xl">
+          {content.title}
+        </h5>
+        <div className="detail-section-copy mt-5 grid gap-4">
+          {content.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+        <div className="mt-6 grid gap-4">
+          {content.pattern.map((paragraph) => (
+            <p className="detail-section-copy" key={paragraph}>
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        <div className="do-avoid-grid is-compact">
+          <section className="example-card do-card">
+            <p className="example-label">Do</p>
+            <img alt={`${content.label} recommended pattern`} src={content.doImage} />
+            <ul>
+              {content.doItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+          <section className="example-card avoid-card">
+            <p className="example-label">Avoid</p>
+            <img alt={`${content.label} pattern to avoid`} src={content.avoidImage} />
+            <ul>
+              {content.avoidItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+        </div>
+        <div className="mt-6">
+          <p className="detail-section-label">References</p>
+          <ul className="mt-2 grid gap-2 text-sm leading-6 text-[#49647d]">
+            {content.references.map((reference) => (
+              <li key={reference}>{reference}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function GuidelineDetail({
   category,
 
@@ -456,6 +672,10 @@ function GuidelineDetail({
   number,
 
   onBack,
+
+  onBackToMain,
+
+  onBackToGuidebooks,
 
   onOpenExamples,
 }: {
@@ -467,18 +687,34 @@ function GuidelineDetail({
 
   onBack: () => void
 
+  onBackToMain: () => void
+
+  onBackToGuidebooks: () => void
+
   onOpenExamples: (principle: string, guidelineId: string) => void
 }) {
+  const detailedContent =
+    guideline.id === "user-experience"
+      ? {
+          "Context-Awareness": guidelineContent.context,
+          Usability: guidelineContent.usability,
+          Feedback: guidelineContent.feedback,
+        }
+      : null
+
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
-      <div className="mx-auto max-w-[1320px] px-5 py-8 sm:px-8 sm:py-12 lg:px-12 lg:py-16">
-        <button className="back-button" onClick={onBack} type="button">
-          <BackIcon />
-          Back to guidelines
-        </button>
-
-        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-20">
-          <article className="max-w-3xl">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Guidelines", onClick: onBackToGuidebooks },
+          { label: "HCAI", onClick: onBackToMain },
+          { label: "Principles", onClick: onBack },
+          { label: guideline.title },
+        ]}
+      />
+      <div className="mx-auto max-w-[1480px] px-5 py-8 sm:px-8 sm:py-12 lg:px-12 lg:py-16">
+        <div className="mt-10">
+          <article className="max-w-none">
             <div className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-[#006cb8] uppercase">
               <span className="h-2.5 w-2.5 rounded-full bg-[#006cb8]" />
               {category} · Guideline {String(number).padStart(2, "0")}
@@ -486,31 +722,49 @@ function GuidelineDetail({
             <h1 className="mt-7 text-4xl leading-[1.05] font-semibold tracking-[-0.045em] text-[#082542] sm:text-5xl lg:text-6xl">
               {guideline.title}
             </h1>
-
             <div className="detail-copy mt-10">
-              <p>{guideline.description}</p>
-              <p>
-                Use the following design principles to translate this guideline
+              <p>{guideline.description}.  Use the following design principles to translate this guideline
                 into concrete interface decisions, interaction patterns, and
-                implementation requirements.
-              </p>
+                implementation requirements.</p>
             </div>
+            <button
+              className="design-guideline-link mt-8"
+              onClick={() =>
+                onOpenExamples(guideline.patterns[0], guideline.id)
+              }
+              type="button"
+            >
+              Check examples in HCAI Design Library
+              <ArrowIcon />
+            </button>
 
             <section className="mt-14 border-t border-[#bfd8eb] pt-10">
               <h3 className="text-2xl font-semibold tracking-[-0.03em] text-[#082542] sm:text-3xl">
                 Design guidelines to follow
               </h3>
-              <ol className="mt-7 grid gap-4">
+              <div className="mt-7 grid gap-4">
                 {guideline.patterns.map((principle, index) => {
+                  const content = detailedContent?.[principle as keyof typeof detailedContent]
+
+                  if (content) {
+                    return (
+                      <DetailedGuidelineSection
+                        content={content}
+                        key={principle}
+                        number={index + 1}
+                      />
+                    )
+                  }
+
                   const guidance = principleGuidance[principle]
 
                   return (
-                    <li className="design-guideline" key={principle}>
+                    <article className="design-guideline" key={principle}>
                       <span className="design-guideline-number">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <div>
-                        <h4 className="text-lg font-semibold text-[#082542]">
+                        <h4 className="text-lg font-semibold text-[#006cb8]">
                           {principle}
                         </h4>
                         <dl className="mt-5 grid gap-5">
@@ -535,44 +789,13 @@ function GuidelineDetail({
                             </dd>
                           </div>
                         </dl>
-                        <button
-                          className="design-guideline-link"
-                          onClick={() =>
-                            onOpenExamples(principle, guideline.id)
-                          }
-                          type="button"
-                        >
-                          Check examples
-                          <ArrowIcon />
-                        </button>
                       </div>
-                    </li>
+                    </article>
                   )
                 })}
-              </ol>
+              </div>
             </section>
           </article>
-
-          <aside className="lg:pt-16">
-            <div className="detail-summary-card">
-              <div className="flex items-start justify-between">
-                <span className="card-number">
-                  {String(number).padStart(2, "0")}
-                </span>
-                <span className="text-xs font-semibold tracking-[0.14em] text-white/90 uppercase">
-                  {category}
-                </span>
-              </div>
-              <div className="mt-auto pt-24">
-                <h2 className="text-2xl leading-tight font-semibold tracking-[-0.025em] text-white">
-                  {guideline.title}
-                </h2>
-                <p className="mt-4 text-sm leading-6 text-white/90">
-                  {guideline.description}
-                </p>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
     </main>
@@ -582,9 +805,17 @@ function GuidelineDetail({
 function GuidelinesPage({
   onBack,
 
+  onBackToMain,
+
+  onBackToGuidebooks,
+
   onOpenExamples,
 }: {
   onBack: () => void
+
+  onBackToMain: () => void
+
+  onBackToGuidebooks: () => void
 
   onOpenExamples: (principle: string, guidelineId: string) => void
 }) {
@@ -613,6 +844,8 @@ function GuidelinesPage({
 
           window.scrollTo({ top: 0, behavior: "smooth" })
         }}
+        onBackToMain={onBackToMain}
+        onBackToGuidebooks={onBackToGuidebooks}
         onOpenExamples={onOpenExamples}
       />
     )
@@ -620,11 +853,14 @@ function GuidelinesPage({
 
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Guidelines", onClick: onBackToGuidebooks },
+          { label: "HCAI", onClick: onBack },
+          { label: "Principles" },
+        ]}
+      />
       <header className="mx-auto max-w-[1480px] px-5 pt-8 pb-11 sm:px-8 sm:pt-12 lg:px-12 lg:pt-16 lg:pb-16">
-        <button className="back-button mb-8" onClick={onBack} type="button">
-          <BackIcon />
-          Back to main page
-        </button>
         <div className="flex items-center gap-3 text-xs font-semibold tracking-[0.18em] text-[#006cb8] uppercase">
           <span className="h-2.5 w-2.5 rounded-full bg-[#006cb8]" />
           Human-centered AI
@@ -653,6 +889,7 @@ function GuidelinesPage({
                 guideline={guideline}
                 key={guideline.title}
                 number={index + 1}
+                disabled={guideline.id !== "user-experience"}
                 onOpen={() => {
                   setActiveGuidelineId(guideline.id)
 
@@ -697,23 +934,16 @@ const aiCapabilities = [
   "Generative",
 ]
 
-const aiProducts = [
+const aiProducts = ["Dashboard", "IoT/Robotics", "Drone"]
+
+const aiProductFilterOptions = [
   "Dashboard",
-
   "Website",
-
-  "Platform",
-
   "Drone",
-
-  "VR/AR",
-
+  "Platform",
+  "Agentic AI",
   "Geospatial",
-
-  "Remote Sensing",
-
-  "Digital Twin",
-
+  "VR/AR",
   "IoT/Robotics",
 ]
 
@@ -1184,12 +1414,12 @@ function MainPage({
 
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
-      <nav className="mx-auto flex max-w-[1480px] items-center justify-start px-5 py-6 sm:px-8 lg:px-12">
-        <button className="hub-return-button" onClick={onBack} type="button">
-          <BackIcon />
-          All guidebooks
-        </button>
-      </nav>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Guidelines", onClick: onBack },
+          { label: "HCAI" },
+        ]}
+      />
 
       <header
         className="mx-auto max-w-[1480px] px-5 pt-14 pb-16 sm:px-8 sm:pt-20 lg:px-12 lg:pt-28 lg:pb-24"
@@ -1363,6 +1593,157 @@ function MainPage({
           </p>
         </div>
       </footer>
+    </main>
+  )
+}
+
+function DoAvoid({
+  content,
+}: {
+  content: GuidelineContent
+}) {
+  return (
+    <div className="do-avoid-grid is-compact">
+      <section className="example-card do-card">
+        <p className="example-label">Do</p>
+        <img alt={`${content.label} recommended pattern`} src={content.doImage} />
+        <ul>
+          {content.doItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+      <section className="example-card avoid-card">
+        <p className="example-label">Avoid</p>
+        <img alt={`${content.label} pattern to avoid`} src={content.avoidImage} />
+        <ul>
+          {content.avoidItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+function Divider() {
+  return <hr className="my-10 border-0 border-t border-[#bfd8eb]" />
+}
+
+function DashboardPage({
+  onBack,
+  onBackToHcai,
+  onBackToGuidebooks,
+  openPrinciple,
+  openGuideline,
+}: {
+  onBack: () => void
+  onBackToHcai: () => void
+  onBackToGuidebooks: () => void
+  openPrinciple: (guidelineId: string) => void
+  openGuideline: (key: GuidelineKey) => void
+}) {
+  const dashboardSections = [
+    {
+      key: "context" as GuidelineKey,
+      content: {
+        ...guidelineContent.context,
+        doImage: dashboardContextDoImage,
+        avoidImage: dashboardContextAvoidImage,
+        doItems: [
+          "AI label and confidence badge sit next to the title.",
+          "An info icon opens a tooltip saying what the forecast is based on.",
+        ],
+        avoidItems: guidelineContent.context.avoidItems.slice(0, 2),
+      },
+    },
+    {
+      key: "usability" as GuidelineKey,
+      content: {
+        ...guidelineContent.usability,
+        doImage: dashboardUsabilityDoImage,
+        avoidImage: dashboardUsabilityAvoidImage,
+        doItems: [
+          "A labelled “Ask AI” button sits in the widget header, in a consistent place.",
+          "Suggested questions use everyday language.",
+        ],
+        avoidItems: [
+          "AI entry is an unlabelled sparkle icon among identical icon-only buttons.",
+          "Missing explanation because there is no basis, confidence value, or info icon.",
+        ],
+      },
+    },
+    {
+      key: "feedback" as GuidelineKey,
+      content: {
+        ...guidelineContent.feedback,
+        doItems: [
+          "Floating panel directly next to the AI feature, easily dismissible.",
+          "Clearly states how the user benefits from helping.",
+          "Offers binary choices, quick chips, or a detailed text option.",
+          "Explains what happens to the submitted data and notes.",
+        ],
+        avoidItems: [
+          "Screen-blocking modal that stops the user workflow.",
+          "Demanding language with no clear benefit to the user.",
+          "Forces users to write detailed text without quick options.",
+          "Uses vague wording about where the feedback data goes.",
+        ],
+      },
+    },
+  ]
+
+  return (
+    <main className="site-page">
+      <div className="page-shell dashboard-shell">
+        <header className="dashboard-header">
+          <h1>Dashboard Design Pattern</h1>
+          <p>
+            Pattern guides to design a Human Centered Dashboard with AI-infused
+            features. Choose one of the principles, check the guidelines and
+            use it to compass your design.
+          </p>
+        </header>
+        <div className="dashboard-layout">
+          <aside className="guideline-sidebar dashboard-sidebar">
+            <strong>Principles</strong>
+            {guidelines.map((guideline, index) => (
+              <button
+                className={index === 0 ? "active" : ""}
+                key={guideline.id}
+                onClick={() => openPrinciple(guideline.id)}
+                type="button"
+              >
+                {guideline.title}
+              </button>
+            ))}
+          </aside>
+          <div className="dashboard-content">
+            <article className="dashboard-principle">
+              <h2>User Experience</h2>
+              <div className="dark-pills mt-2">
+                {guidelines[0].patterns.map((pattern) => (
+                  <span key={pattern}>{pattern}</span>
+                ))}
+              </div>
+              <p>{guidelines[0].description}</p>
+            </article>
+            {dashboardSections.map(({ key, content }, index) => (
+              <section className="dashboard-pattern" key={key}>
+                <div className="pattern-heading">
+                  <h2>{content.title}</h2>
+                  <button onClick={() => openGuideline(key)} type="button">
+                    {content.label}
+                    <ArrowIcon />
+                  </button>
+                </div>
+                <DoAvoid content={content} />
+                {index < dashboardSections.length - 1 && <Divider />}
+              </section>
+            ))}
+          </div>
+        </div>
+      </div>
     </main>
   )
 }
@@ -1581,21 +1962,29 @@ function FeatureDetailPage({
   example,
 
   onBack,
+  onBackToHcai,
+  onBackToGuidebooks,
 }: {
   capability: string
 
   example: FeatureExample
 
   onBack: () => void
+  onBackToHcai: () => void
+  onBackToGuidebooks: () => void
 }) {
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Guidelines", onClick: onBackToGuidebooks },
+          { label: "HCAI", onClick: onBackToHcai },
+          { label: "Examples", onClick: onBack },
+          { label: example.product },
+          { label: `${example.type} implementation` },
+        ]}
+      />
       <div className="mx-auto max-w-[1320px] px-5 py-8 sm:px-8 sm:py-12 lg:px-12 lg:py-16">
-        <button className="back-button" onClick={onBack} type="button">
-          <BackIcon />
-          Back to {example.product}
-        </button>
-
         <header className="mt-10 max-w-4xl">
           <div className="flex flex-wrap gap-2">
             <span className="capability-tag">{capability}</span>
@@ -1730,6 +2119,7 @@ function DesignLibraryPage({
   initialPrinciple,
 
   onBack,
+  onBackToGuidebooks,
 }: {
   initialGoals?: string[]
 
@@ -1738,6 +2128,8 @@ function DesignLibraryPage({
   initialPrinciple?: string
 
   onBack: () => void
+
+  onBackToGuidebooks: () => void
 }) {
   const [selectedGuidelines, setSelectedGuidelines] = useState<string[]>(
     initialGuidelineId && !initialPrinciple ? [initialGuidelineId] : [],
@@ -1762,8 +2154,6 @@ function DesignLibraryPage({
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
 
   const [selectedCapabilities, setSelectedCapabilities] = useState<string[]>([])
-
-  const [openProducts, setOpenProducts] = useState<string[]>(["Dashboard"])
 
   const [activeProduct, setActiveProduct] = useState<string | null>(null)
 
@@ -1835,14 +2225,6 @@ function DesignLibraryPage({
       current.includes(filterId)
         ? current.filter((id) => id !== filterId)
         : [...current, filterId],
-    )
-  }
-
-  const toggleProductAccordion = (product: string) => {
-    setOpenProducts((current) =>
-      current.includes(product)
-        ? current.filter((item) => item !== product)
-        : [...current, product],
     )
   }
 
@@ -1922,18 +2304,6 @@ function DesignLibraryPage({
       example.appliedGuidelines.some(matchesGuidelineFilter),
   )
 
-  const displayedExampleGroups = aiProducts
-
-    .map((product) => ({
-      product,
-
-      examples: displayedExamples.filter(
-        (example) => example.product === product,
-      ),
-    }))
-
-    .filter((group) => group.examples.length > 0)
-
   const hasFilters = hasGuidelineFilters || hasAiFilters
 
   if (activeFeature) {
@@ -1942,6 +2312,8 @@ function DesignLibraryPage({
         capability={activeFeature.capability}
         example={activeFeature.example}
         onBack={() => setActiveFeature(null)}
+        onBackToHcai={onBack}
+        onBackToGuidebooks={onBackToGuidebooks}
       />
     )
   }
@@ -1961,6 +2333,8 @@ function DesignLibraryPage({
 
           window.scrollTo({ top: 0, behavior: "smooth" })
         }}
+        onBackToMain={onBack}
+        onBackToGuidebooks={onBackToGuidebooks}
         onOpenExamples={(principle, guidelineId) => {
           const sourceGuideline = indexedGuidelines.find(
             (guideline) => guideline.id === guidelineId,
@@ -1992,31 +2366,19 @@ function DesignLibraryPage({
 
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
-      <header className="border-b border-[#d7e7f2] bg-white">
-        <div className="mx-auto max-w-[1480px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
-          <button className="back-button" onClick={onBack} type="button">
-            <BackIcon />
-            Back to main page
-          </button>
-          <div className="mt-9 grid gap-5 lg:grid-cols-[1fr_480px] lg:items-end">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-[#006cb8] uppercase">
-                Explore and refine
-              </p>
-              <h1 className="mt-4 text-4xl font-semibold tracking-[-0.045em] text-[#082542] sm:text-5xl">
-                HCAI Design Library
-              </h1>
-            </div>
-            <p className="text-base leading-7 text-[#557087]">
-              Browse human-centered AI guidelines and feature examples, then
-              refine the library by guideline or product context.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto grid max-w-[1480px] gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[310px_minmax(0,1fr)] lg:px-12 lg:py-12">
-        <aside className="filter-panel">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Guidelines", onClick: onBackToGuidebooks },
+          { label: "HCAI", onClick: onBack },
+          { label: "Examples" },
+        ]}
+      />
+      <div
+        className={`mx-auto grid max-w-[1480px] gap-8 px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${
+          activeProduct ? "" : "lg:grid-cols-[310px_minmax(0,1fr)]"
+        }`}
+      >
+        {!activeProduct && <aside className="filter-panel">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-lg font-semibold tracking-[-0.02em]">
               Refine results
@@ -2174,16 +2536,26 @@ function DesignLibraryPage({
           <fieldset className="mt-8 border-t border-[#d7e7f2] pt-7">
             <legend className="filter-legend">AI Product</legend>
             <div className="mt-5 flex flex-wrap gap-2">
-              {aiProducts.map((product) => (
-                <label className="product-option" key={product}>
+              {aiProductFilterOptions.map((product) => {
+                const isAvailable = product === "Dashboard"
+
+                return (
+                <label
+                  className={`product-option ${
+                    !isAvailable ? "product-option-disabled" : ""
+                  }`}
+                  key={product}
+                >
                   <input
                     checked={selectedProducts.includes(product)}
                     onChange={() => toggleFilter(product, setSelectedProducts)}
+                    disabled={!isAvailable}
                     type="checkbox"
                   />
                   <span>{product}</span>
                 </label>
-              ))}
+                )
+              })}
             </div>
           </fieldset>
 
@@ -2246,10 +2618,35 @@ function DesignLibraryPage({
               </div>
             </fieldset>
           </details>
-        </aside>
+        </aside>}
 
         <div>
-          {activeProduct ? (
+          {activeProduct === "Dashboard" ? (
+            <DashboardPage
+              onBack={() => {
+                setActiveProduct(null)
+
+                requestAnimationFrame(() => {
+                  document
+                    .getElementById("feature-examples")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                })
+              }}
+              onBackToHcai={onBack}
+              onBackToGuidebooks={onBackToGuidebooks}
+              openPrinciple={(guidelineId) => {
+                setActiveProduct(null)
+                setActiveLibraryGuidelineId(guidelineId)
+                window.scrollTo({ top: 0, behavior: "smooth" })
+              }}
+              openGuideline={(key) => {
+                if (guidelineContent[key]) {
+                  setActiveLibraryGuidelineId("user-experience")
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              }}
+            />
+          ) : activeProduct ? (
             <ProductPage
               examples={displayedExamples.filter(
                 (example) => example.product === activeProduct,
@@ -2299,7 +2696,11 @@ function DesignLibraryPage({
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                   {displayedGuidelines.map((guideline) => (
                     <article
-                      className="library-guideline-card"
+                      className={`library-guideline-card ${
+                        guideline.id === "user-experience"
+                          ? ""
+                          : "library-guideline-card-disabled"
+                      }`}
                       key={guideline.id}
                     >
                       <button
@@ -2310,6 +2711,7 @@ function DesignLibraryPage({
 
                           window.scrollTo({ top: 0, behavior: "smooth" })
                         }}
+                        disabled={guideline.id !== "user-experience"}
                         type="button"
                       />
                       <div className="flex items-start justify-between gap-4">
@@ -2351,153 +2753,61 @@ function DesignLibraryPage({
                 id="feature-examples"
               >
                 <div>
-                  <p className="text-xs font-semibold tracking-[0.16em] text-[#29a56a] uppercase">
-                    Step 2 · Apply
-                  </p>
-                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.035em]">
-                    Feature examples
+                  <h2 className="text-3xl font-semibold tracking-[-0.035em]">
+                    Design Pattern Library
                   </h2>
                   <p className="mt-2 max-w-xl text-sm leading-6 text-[#557087]">
-                    See how the selected principles translate into product
-                    features, AI capabilities, and interface decisions.
+                    Explore product-specific patterns that translate
+                    human-centered AI principles into practical interface
+                    decisions.
                   </p>
                 </div>
                 <p className="text-sm text-[#557087]">
-                  {displayedExamples.length} example
-                  {displayedExamples.length === 1 ? "" : "s"}
+                  {aiProductFilterOptions.length} products
                 </p>
               </div>
 
-              {displayedExamples.length > 0 ? (
-                <div className="mt-8 grid gap-10">
-                  {displayedExampleGroups.map((group) => (
-                    <section
-                      className="product-result-section"
-                      key={group.product}
+              <div className="mt-8 grid gap-10">
+                {aiProductFilterOptions.map((product) => {
+                  const isAvailable = product === "Dashboard"
+
+                  return (
+                    <article
+                      className={`library-guideline-card dashboard-product-card ${
+                        !isAvailable ? "dashboard-product-card-disabled" : ""
+                      }`}
+                      key={product}
                     >
-                      <div className="product-accordion-header">
-                        <h3>
-                          <button
-                            className="product-page-link"
-                            onClick={() => {
-                              setActiveProduct(group.product)
-
-                              window.scrollTo({ top: 0, behavior: "smooth" })
-                            }}
-                            type="button"
-                          >
-                            <span className="product-accordion-label">
-                              Product type · Open product page
-                            </span>
-                            <span className="product-accordion-title">
-                              {group.product}
-                            </span>
-                          </button>
-                        </h3>
-                        <span className="product-accordion-count">
-                          {group.examples.length} example
-                          {group.examples.length === 1 ? "" : "s"}
+                      <button
+                        aria-label={`Open ${product} Design Pattern`}
+                        className="library-guideline-link"
+                        disabled={!isAvailable}
+                        onClick={() => {
+                          setActiveProduct(product)
+                          window.scrollTo({ top: 0, behavior: "smooth" })
+                        }}
+                        type="button"
+                      />
+                      <div className="flex items-start justify-between gap-4">
+                        <span className="goal-tag-dark">
+                          Product design pattern
                         </span>
-                        <button
-                          aria-controls={`product-panel-${group.product.replaceAll(" ", "-").replaceAll("/", "-")}`}
-                          aria-expanded={openProducts.includes(group.product)}
-                          aria-label={`${
-                            openProducts.includes(group.product)
-                              ? "Collapse"
-                              : "Expand"
-                          } ${group.product} examples`}
-                          className="product-accordion-toggle"
-                          onClick={() => toggleProductAccordion(group.product)}
-                          type="button"
-                        >
-                          <span
-                            className={`product-accordion-chevron ${
-                              openProducts.includes(group.product)
-                                ? "product-accordion-chevron-open"
-                                : ""
-                            }`}
-                          >
-                            <ChevronIcon />
-                          </span>
-                        </button>
+                        <span className="card-arrow">
+                          <ArrowIcon />
+                        </span>
                       </div>
-
-                      {openProducts.includes(group.product) && (
-                        <div
-                          className="product-result-panel grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-                          id={`product-panel-${group.product.replaceAll(" ", "-").replaceAll("/", "-")}`}
-                        >
-                          {group.examples.map((example) => {
-                            const visibleAppliedGuidelines =
-                              example.appliedGuidelines.filter(
-                                (guideline) =>
-                                  !hasGuidelineFilters ||
-                                  matchesGuidelineFilter(guideline),
-                              )
-
-                            return (
-                              <article
-                                className="feature-example-card"
-                                key={example.id}
-                              >
-                                <button
-                                  aria-label={`Open ${example.title} implementation`}
-                                  className="feature-card-link"
-                                  onClick={() =>
-                                    setActiveFeature({
-                                      capability:
-                                        selectedCapabilities.find(
-                                          (capability) =>
-                                            analyticsMatrix[example.product]?.[
-                                              example.type
-                                            ]?.includes(capability),
-                                        ) ??
-                                        analyticsMatrix[example.product]?.[
-                                          example.type
-                                        ]?.[0] ??
-                                        "AI capability",
-
-                                      example,
-                                    })
-                                  }
-                                  type="button"
-                                />
-                                <div className="flex flex-wrap gap-2">
-                                  {visibleAppliedGuidelines.map((guideline) => (
-                                    <span
-                                      className="feature-design-tag"
-                                      key={guideline.id}
-                                    >
-                                      {guideline.designGuideline}
-                                    </span>
-                                  ))}
-                                  <span className="feature-tag">
-                                    {example.type}
-                                  </span>
-                                </div>
-                                <h4 className="mt-7 text-lg font-semibold tracking-[-0.02em] text-[#082542]">
-                                  {example.title}
-                                </h4>
-                                <p className="mt-3 text-sm leading-6 text-[#5a7186]">
-                                  {example.description}
-                                </p>
-                                <span className="feature-card-action">
-                                  View implementation
-                                  <ArrowIcon />
-                                </span>
-                              </article>
-                            )
-                          })}
-                        </div>
-                      )}
-                    </section>
-                  ))}
-                </div>
-              ) : (
-                <div className="empty-library-state">
-                  No feature examples match the selected filters.
-                </div>
-              )}
+                      <h3 className="mt-auto pt-12 text-3xl leading-tight font-semibold tracking-[-0.04em] text-white">
+                        {product}
+                      </h3>
+                      <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90">
+                        {isAvailable
+                          ? "Explore human-centered AI patterns for dashboard products, including context-aware, usable, and feedback-driven experiences."
+                          : "Design patterns for this product are coming soon."}
+                      </p>
+                    </article>
+                  )
+                })}
+              </div>
             </>
           )}
         </div>
@@ -2550,6 +2860,8 @@ function App() {
     content = (
       <GuidelinesPage
         onBack={() => navigate("main")}
+        onBackToMain={() => navigate("main")}
+        onBackToGuidebooks={() => navigate("gateway")}
         onOpenExamples={openGuidelineExamples}
       />
     )
@@ -2560,6 +2872,7 @@ function App() {
         initialGuidelineId={libraryGuidelineId}
         initialPrinciple={libraryPrinciple}
         onBack={() => navigate("main")}
+        onBackToGuidebooks={() => navigate("gateway")}
       />
     )
   } else if (page === "ux") {

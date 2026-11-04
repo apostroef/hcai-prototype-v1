@@ -1,22 +1,28 @@
 import { useState } from "react"
+import type { ReactNode } from "react"
 import ArrowIcon from "./arrow-icon"
 
 /* ---------- Types ---------- */
 type Row = (string | number)[]
-type Block =
-  | { kind: "swatches"; title: string; colors: [string, string][] }
-  | { kind: "table"; head: string[]; rows: Row[] }
-  | { kind: "list"; title: string; items: string[]; ordered?: boolean }
-  | { kind: "code"; code: string }
-  | { kind: "logo-preview"; title: string }
-  | { kind: "icon-preview"; title: string }
-  | { kind: "preview"; name: "type" | "kpi" | "table" }
+type Block = { kind: "swatches"; title: string; colors: [string, string][] } | {
+  kind: "table"
+  head: string[]
+  rows: Row[]
+} | {
+  kind: "type-table"
+} | { kind: "list"; title: string; items: string[]; ordered?: boolean } | {
+  kind: "code"
+  code: string
+} | { kind: "logo-preview"; title: string } | {
+  kind: "icon-preview"
+  title: string
+} | { kind: "preview"; name: "kpi" | "table" }
 type Section = { label: string; title: string; blocks: Block[]; open?: boolean }
 type DocPage = {
   id: string
   group: string
   title: string
-  intro: string
+  intro: ReactNode
   sections: Section[]
 }
 
@@ -187,23 +193,19 @@ const pages: DocPage[] = [
     id: "typography",
     group: "Design Standards",
     title: "Typography",
-    intro:
-      "Futura is the main typeface across Pertamina Digital Hub platforms. Inter and DIN are chosen for screen optimization, high legibility at many sizes, and availability as Google Web Fonts that can be uploaded to Power BI.",
+    intro: (
+      <>
+        <span>Futura</span> is the main typeface across Pertamina Digital Hub
+        platforms. <strong>Inter</strong> and <strong>DIN</strong> are chosen for
+        screen optimization, high legibility at many sizes, and availability as
+        Google Web Fonts that can be uploaded to Power BI.
+      </>
+    ),
     sections: [
       {
-        label: "Preview",
-        title: "Type scale",
-        blocks: [{ kind: "preview", name: "type" }],
-      },
-      {
         label: "Specification",
-        title: "Size and weight reference",
-        blocks: [
-          specs(
-            ["Level", "Size (px)", "Weight", "Power BI (pt)", "Use"],
-            TYPE_SCALE.map(([n, px, , w, pt, use]) => [n, px, w, pt, use]),
-          ),
-        ],
+        title: "Typography scale",
+        blocks: [{ kind: "type-table" }],
       },
     ],
   },
@@ -509,33 +511,7 @@ const readableOn = (hex: string) => {
 }
 
 /* ---------- Live previews (Pertamina tokens are scoped to the sample only) ---------- */
-function Preview({ name }: { name: "type" | "kpi" | "table" }) {
-  if (name === "type")
-    return (
-      <div className="implementation-card grid gap-4">
-        <div className="rounded-xl border border-[#cfe1ee] bg-[#f7faff] px-4 py-3">
-          <span className="detail-section-label">Font name</span>
-          <p className="mt-1 text-xl font-semibold tracking-[-0.02em] text-[#082542]">
-            Inter
-          </p>
-        </div>
-        {TYPE_SCALE.map(([n, , size, weight, , use]) => (
-          <div className="grid gap-1 border-b border-[#e2edf4] pb-3" key={n}>
-            <span className="detail-section-label">{n}</span>
-            <span
-              style={{
-                fontSize: size,
-                fontWeight: weight,
-                color: "#1C1C1C",
-                lineHeight: 1.25,
-              }}
-            >
-              {use}
-            </span>
-          </div>
-        ))}
-      </div>
-    )
+function Preview({ name }: { name: "kpi" | "table" }) {
   if (name === "kpi")
     return (
       <div className="implementation-card grid gap-4">
@@ -665,6 +641,101 @@ function CodeBlock({ code }: { code: string }) {
   )
 }
 
+function TypeScaleTable() {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-[#cfe1ee] bg-white">
+      <table className="w-full min-w-[760px] text-left text-sm text-[#49647d]">
+        <thead>
+          <tr>
+            {["Level", "Size (px)", "Weight", "Power BI (pt)", "Use", ""].map(
+              (heading) => (
+                <th
+                  className="bg-[#e7f3fc] px-4 py-3 text-xs font-bold text-[#082542]"
+                  key={heading || "copy"}
+                  scope="col"
+                >
+                  {heading}
+                </th>
+              ),
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {TYPE_SCALE.map(([name, , size, weight, powerBi, use]) => (
+            <TypeScaleRow
+              key={name}
+              name={name}
+              powerBi={powerBi}
+              size={size}
+              use={use}
+              weight={weight}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function TypeScaleRow({
+  name,
+  powerBi,
+  size,
+  use,
+  weight,
+}: {
+  name: string
+  powerBi: string
+  size: number
+  use: string
+  weight: number
+}) {
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
+    "idle",
+  )
+  const token = `font-family: Inter; font-size: ${size}px; font-weight: ${weight};`
+
+  const copyToken = async () => {
+    try {
+      await navigator.clipboard.writeText(token)
+      setCopyState("copied")
+      window.setTimeout(() => setCopyState("idle"), 1500)
+    } catch {
+      setCopyState("failed")
+      window.setTimeout(() => setCopyState("idle"), 2000)
+    }
+  }
+
+  return (
+    <tr>
+      <th
+        className="border-t border-[#e2edf4] px-4 py-3 font-semibold text-[#082542]"
+        scope="row"
+      >
+        {name}
+      </th>
+      <td className="border-t border-[#e2edf4] px-4 py-3">{size}</td>
+      <td className="border-t border-[#e2edf4] px-4 py-3">{weight}</td>
+      <td className="border-t border-[#e2edf4] px-4 py-3">{powerBi}</td>
+      <td className="border-t border-[#e2edf4] px-4 py-3">{use}</td>
+      <td className="border-t border-[#e2edf4] px-4 py-3">
+        <button
+          aria-label={`Copy ${name} font token`}
+          className="toolkit-secondary-action whitespace-nowrap px-3 py-2 text-xs"
+          onClick={copyToken}
+          type="button"
+        >
+          {copyState === "copied"
+            ? "Copied"
+            : copyState === "failed"
+              ? "Copy failed"
+              : "Copy token"}
+        </button>
+      </td>
+    </tr>
+  )
+}
+
 function BlockView({ block }: { block: Block }) {
   switch (block.kind) {
     case "swatches":
@@ -735,6 +806,8 @@ function BlockView({ block }: { block: Block }) {
           </table>
         </div>
       )
+    case "type-table":
+      return <TypeScaleTable />
     case "list": {
       const Tag = block.ordered ? "ol" : "ul"
       const isDoNot = block.title.toLowerCase() === "do not"
@@ -780,41 +853,14 @@ function BlockView({ block }: { block: Block }) {
         <div className="implementation-card">
           <h3 className="detail-section-label">{block.title}</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {["Preview 01", "Preview 02", "Preview 03"].map((label, index) => (
-              <figure
-                aria-label={`Dummy ${label} logo image`}
-                className="m-0 overflow-hidden rounded-xl border border-[#cfe1ee]"
-                key={label}
-                role="img"
-              >
-                <div
-                  className={`grid aspect-[4/3] place-items-center ${
-                    index === 1
-                      ? "bg-[#1b5fad]"
-                      : index === 2
-                        ? "bg-[#e7f3fc]"
-                        : "bg-[#082542]"
-                  }`}
-                >
-                  <span
-                    className={`rounded-md border-2 px-4 py-2 text-center text-xs font-bold tracking-[0.14em] uppercase ${
-                      index === 2
-                        ? "border-[#006cb8] text-[#006cb8]"
-                        : "border-white/70 text-white"
-                    }`}
-                  >
-                    Logo placeholder
-                  </span>
+                <div className="place-items-center bg-[#e7f3fc]">
+                  <img
+                    alt={`Pertamina logo`}
+                    className="h-full w-full object-contain"
+                    src="/assets/Logo_Pertamina.png"
+                  />
                 </div>
-                <figcaption className="px-3 py-2 text-xs font-semibold text-[#557087]">
-                  {label}
-                </figcaption>
-              </figure>
-            ))}
           </div>
-          <p className="detail-section-copy mt-4">
-            Dummy image placeholders for use-case logo applications.
-          </p>
         </div>
       )
     case "icon-preview":
@@ -957,32 +1003,42 @@ export default function UIContent({ onBack }: { onBack: () => void }) {
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
       <header className="border-b border-[#d7e7f2] bg-white">
         <div className="mx-auto max-w-[1480px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
-          {activeGroup === null ? (
-            <button className="back-button" onClick={onBack} type="button">
-              <BackIcon />
-              All guidebooks
+          <nav aria-label="Breadcrumb" className="breadcrumbs">
+            <button onClick={onBack} type="button">
+              Guidelines
             </button>
-          ) : (
-            <nav aria-label="Breadcrumb" className="guideline-breadcrumbs">
-              <button onClick={onBack} type="button">
-                All guidebooks
-              </button>
+            <span className="breadcrumb-part">
               <span aria-hidden="true">›</span>
-              <label className="guideline-breadcrumb-select">
-                <span className="sr-only">Choose a guideline category</span>
-                <select
-                  aria-label="Choose a guideline category"
-                  onChange={(event) => selectGroup(event.target.value)}
-                  value={activeGroup}
-                >
-                  {groups.map((group) => (
-                    <option key={group}>{group}</option>
-                  ))}
-                </select>
-                <ChevronIcon />
-              </label>
-            </nav>
-          )}
+              <button
+                aria-current={activeGroup === null ? "page" : undefined}
+                onClick={() => {
+                  setActiveGroup(null)
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }}
+                type="button"
+              >
+                UI
+              </button>
+            </span>
+            {activeGroup !== null && (
+              <span className="breadcrumb-part">
+                <span aria-hidden="true">›</span>
+                <label className="guideline-breadcrumb-select">
+                  <span className="sr-only">Choose a guideline category</span>
+                  <select
+                    aria-label="Choose a guideline category"
+                    onChange={(event) => selectGroup(event.target.value)}
+                    value={activeGroup}
+                  >
+                    {groups.map((group) => (
+                      <option key={group}>{group}</option>
+                    ))}
+                  </select>
+                  <ChevronIcon />
+                </label>
+              </span>
+            )}
+          </nav>
           <div className="mt-9 max-w-4xl">
             <div>
               <p className="toolkit-eyebrow">
@@ -1047,7 +1103,7 @@ export default function UIContent({ onBack }: { onBack: () => void }) {
         </section>
       ) : (
         <div
-          className={`mx-auto grid max-w-[1480px] gap-8 px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${
+          className={`guideline-page-layout mx-auto grid max-w-[1480px] gap-8 px-5 py-8 sm:px-8 lg:px-12 lg:py-12 ${
             pages.filter((p) => p.group === activeGroup).length > 1
               ? "lg:grid-cols-[250px_minmax(0,1fr)]"
               : ""

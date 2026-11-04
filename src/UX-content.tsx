@@ -2,14 +2,11 @@ import { useState } from "react"
 
 /* ---------- Types ---------- */
 type Row = (string | number)[]
-type Block =
-  | { kind: "text"; text: string }
-  | {
+type Block = { kind: "text"; text: string } | {
   kind: "list"
   items: string[]
   ordered?: boolean
-    }
-  | { kind: "table"; head: string[]; rows: Row[] }
+} | { kind: "table"; head: string[]; rows: Row[] }
 type Section = { title: string; blocks: Block[] }
 type Topic = {
   id: string
@@ -539,10 +536,17 @@ function Landing({
   return (
     <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
       <header className="mx-auto max-w-[1480px] px-5 pt-8 pb-11 sm:px-8 sm:pt-12 lg:px-12 lg:pt-16 lg:pb-16">
-        <button className="back-button mb-8" onClick={onBack} type="button">
-          <BackIcon />
-          All guidebooks
-        </button>
+        <nav aria-label="Breadcrumb" className="breadcrumbs">
+          <button onClick={onBack} type="button">
+            Guidelines
+          </button>
+          <span className="breadcrumb-part">
+            <span aria-hidden="true">›</span>
+            <button aria-current="page" type="button">
+              UX
+            </button>
+          </span>
+        </nav>
         <p className="toolkit-eyebrow">UX Guidelines</p>
         <div className="mt-8 max-w-4xl">
           <h1 className="max-w-4xl text-5xl leading-[0.98] font-semibold tracking-[-0.055em] text-[#082542] sm:text-6xl lg:text-[5.4rem]">
@@ -618,40 +622,50 @@ function Landing({
 /* ---------- Topic page: side panel + static content ---------- */
 function TopicPage({
   topic,
+  onBack,
   onBackToGroups,
   onSwitch,
   onSwitchGroup,
 }: {
   topic: Topic
+  onBack: () => void
   onBackToGroups: () => void
   onSwitch: (topicId: string) => void
   onSwitchGroup: (group: string) => void
 }) {
   const siblings = topicsIn(topic.group)
   return (
-    <main className="min-h-screen bg-[#f7faff] text-[#09233f]">
+    <main className="ux-topic-page min-h-screen bg-[#f7faff] text-[#09233f]">
       <header className="border-b border-[#d7e7f2] bg-white">
         <div className="mx-auto max-w-[1480px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
-          <nav aria-label="Breadcrumb" className="guideline-breadcrumbs">
-            <button onClick={onBackToGroups} type="button">
-              UX Guidelines
+          <nav aria-label="Breadcrumb" className="breadcrumbs">
+            <button onClick={onBack} type="button">
+              Guidelines
             </button>
-            <span aria-hidden="true">›</span>
-            <label className="guideline-breadcrumb-select">
-              <span className="sr-only">Choose a UX guideline group</span>
-              <select
-                aria-label="Choose a UX guideline group"
-                onChange={(event) => onSwitchGroup(event.target.value)}
-                value={topic.group}
-              >
-                {groups.map((group) => (
-                  <option key={group.name} value={group.name}>
-                    {group.name}
-                  </option>
-                ))}
-              </select>
-              <ChevronIcon />
-            </label>
+            <span className="breadcrumb-part">
+              <span aria-hidden="true">›</span>
+              <button onClick={onBackToGroups} type="button">
+                UX
+              </button>
+            </span>
+            <span className="breadcrumb-part">
+              <span aria-hidden="true">›</span>
+              <label className="guideline-breadcrumb-select">
+                <span className="sr-only">Choose a UX guideline group</span>
+                <select
+                  aria-label="Choose a UX guideline group"
+                  onChange={(event) => onSwitchGroup(event.target.value)}
+                  value={topic.group}
+                >
+                  {groups.map((group) => (
+                    <option key={group.name} value={group.name}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronIcon />
+              </label>
+            </span>
           </nav>
           <div className="mt-9 max-w-4xl">
             <p className="toolkit-eyebrow">{topic.group}</p>
@@ -664,7 +678,10 @@ function TopicPage({
       </header>
 
       <div className="mx-auto grid max-w-[1480px] gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-12 lg:py-12">
-        <nav aria-label={`${topic.group} topics`} className="filter-panel">
+        <nav
+          aria-label={`${topic.group} topics`}
+          className="filter-panel ux-topic-filter"
+        >
           <h2 className="filter-category-title">{topic.group}</h2>
           <div className="mt-4 grid gap-2">
             {siblings.map((t) => (
@@ -683,6 +700,21 @@ function TopicPage({
         </nav>
 
         <div className="grid content-start gap-12">
+          {(topic.id === "persona" || topic.id === "journey") && (
+            <img
+              alt={
+                topic.id === "persona"
+                  ? "User persona template"
+                  : "User journey map"
+              }
+              className="ux-topic-image"
+              src={
+                topic.id === "persona"
+                  ? "./assets/user_persona.png"
+                  : "./assets/user_journey.png"
+              }
+            />
+          )}
           {topic.sections.map((section, i) => (
             <section key={section.title}>
               <div className="flex items-center gap-4 border-b border-[#cfe1ee] pb-4">
@@ -702,6 +734,18 @@ function TopicPage({
           ))}
         </div>
       </div>
+      <nav aria-label="UX Research Process topics" className="ux-topic-bottom-nav">
+        {siblings.map((item) => (
+          <button
+            className={item.id === topic.id ? "active" : ""}
+            key={item.id}
+            onClick={() => onSwitch(item.id)}
+            type="button"
+          >
+            {item.title}
+          </button>
+        ))}
+      </nav>
     </main>
   )
 }
@@ -714,6 +758,7 @@ export default function UXContent({ onBack }: { onBack: () => void }) {
   if (topic)
     return (
       <TopicPage
+        onBack={onBack}
         onBackToGroups={() => {
           setTopicId(null)
           scrollTop()

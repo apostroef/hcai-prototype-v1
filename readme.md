@@ -23,6 +23,13 @@ npm install
 npm run dev
 ```
 
+This project uses port `8444` by default so it can run alongside the v2 website.
+Set `VITE_PORT` to use another port:
+
+```bash
+$env:VITE_PORT=8445; npm run dev
+```
+
 ### 3. Build & Preview
 ```bash
 # Create a production build
