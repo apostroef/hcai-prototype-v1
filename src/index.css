@@ -74,7 +74,24 @@ h6 {
 }
 
 h1 {
-    line-height: 1.1;
+    color: #082542;
+    font-family: "Inter", sans-serif;
+    font-size: 3rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.055em !important;
+    line-height: 0.98 !important;
+}
+
+@media (min-width: 640px) {
+    h1 {
+        font-size: 3.75rem !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    h1 {
+        font-size: 5.4rem !important;
+    }
 }
 
 h2 {
@@ -923,6 +940,41 @@ button {
     display: none;
 }
 
+.mobile-filter-controls {
+    display: none;
+}
+
+.selected-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.selected-filter-pill {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #9bc9e6;
+    border-radius: 999px;
+    padding: 6px 10px 6px 12px;
+    color: #005a9d;
+    background: #e7f3fc;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.selected-filter-pill:hover {
+    border-color: #006cb8;
+    background: #d7ebf9;
+}
+
+.selected-filter-pill > span[aria-hidden="true"] {
+    color: #006cb8;
+    font-size: 16px;
+    line-height: 1;
+}
+
 .filter-panel-actions,
 .products-heading-actions {
     display: flex;
@@ -1642,6 +1694,12 @@ button {
         justify-content: space-between;
         gap: 16px;
         margin-bottom: 24px;
+    }
+    .mobile-filter-controls {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
     }
     .filter-desktop-header {
         display: none;

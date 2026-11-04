@@ -185,14 +185,26 @@ a {
 }
 
 .design-guideline {
-    display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
-    gap: 1rem;
-    align-items: start;
+    display: block;
     padding: 1.25rem;
     border: 1px solid #d5e6f2;
     border-radius: 1rem;
     background: white;
+}
+
+.design-guideline-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.design-guideline-heading h4 {
+    min-width: 0;
+}
+
+.design-guideline-content {
+    min-width: 0;
+    margin-top: 1rem;
 }
 
 .design-guideline-number {

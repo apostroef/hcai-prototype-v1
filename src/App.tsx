@@ -622,13 +622,15 @@ function DetailedGuidelineSection({
 }) {
   return (
     <article className="design-guideline">
-      <span className="design-guideline-number">
-        {String(number).padStart(2, "0")}
-      </span>
-      <div>
+      <div className="design-guideline-heading">
+        <span className="design-guideline-number">
+          {String(number).padStart(2, "0")}
+        </span>
         <h4 className="text-lg font-semibold text-[#006cb8]">
           {content.label}
         </h4>
+      </div>
+      <div className="design-guideline-content">
         <h5 className="mt-2 text-2xl font-bold tracking-[-0.03em] text-[#082542] sm:text-3xl">
           {content.title}
         </h5>
@@ -747,7 +749,7 @@ function GuidelineDetail({
               }
               type="button"
             >
-              Check examples in HCAI Design Library
+              Check examples in Pattern Library
               <ArrowIcon />
             </button>
 
@@ -773,13 +775,15 @@ function GuidelineDetail({
 
                   return (
                     <article className="design-guideline" key={principle}>
-                      <span className="design-guideline-number">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <div>
+                      <div className="design-guideline-heading">
+                        <span className="design-guideline-number">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
                         <h4 className="text-lg font-semibold text-[#006cb8]">
                           {principle}
                         </h4>
+                      </div>
+                      <div className="design-guideline-content">
                         <dl className="mt-5 grid gap-5">
                           <div>
                             <dt className="detail-section-label">
@@ -1369,7 +1373,7 @@ function MainPage({
     },
 
     {
-      title: "HCAI Design Library",
+      title: "Design Pattern Library",
 
       description:
         "Filter guidelines and discover feature examples across AI types and products.",
@@ -2321,6 +2325,45 @@ function DesignLibraryPage({
 
   const hasFilters = hasGuidelineFilters || hasAiFilters
 
+  const selectedFilterPills = [
+    ...selectedGoals.map((value) => ({
+      label: value,
+      onRemove: () =>
+        setSelectedGoals((current) => current.filter((item) => item !== value)),
+    })),
+    ...selectedGuidelines.map((value) => ({
+      label: guidelines.find((guideline) => guideline.id === value)?.title ?? value,
+      onRemove: () =>
+        setSelectedGuidelines((current) =>
+          current.filter((item) => item !== value),
+        ),
+    })),
+    ...selectedPrinciples.map((value) => ({
+      label: value.split("::")[1] ?? value,
+      onRemove: () =>
+        setSelectedPrinciples((current) =>
+          current.filter((item) => item !== value),
+        ),
+    })),
+    ...selectedProducts.map((value) => ({
+      label: value,
+      onRemove: () =>
+        setSelectedProducts((current) => current.filter((item) => item !== value)),
+    })),
+    ...selectedTypes.map((value) => ({
+      label: value,
+      onRemove: () =>
+        setSelectedTypes((current) => current.filter((item) => item !== value)),
+    })),
+    ...selectedCapabilities.map((value) => ({
+      label: value,
+      onRemove: () =>
+        setSelectedCapabilities((current) =>
+          current.filter((item) => item !== value),
+        ),
+    })),
+  ]
+
   if (activeFeature) {
     return (
       <FeatureDetailPage
@@ -2394,14 +2437,32 @@ function DesignLibraryPage({
         }`}
       >
         {!activeProduct && (
-          <button
-            className="filter-toggle-button"
-            onClick={() => setFilterOpen(true)}
-            type="button"
-          >
-            <MenuIcon />
-            Filter
-          </button>
+          <div className="mobile-filter-controls">
+            <button
+              className="filter-toggle-button"
+              onClick={() => setFilterOpen(true)}
+              type="button"
+            >
+              <MenuIcon />
+              Filter
+            </button>
+            {selectedFilterPills.length > 0 && (
+              <div aria-label="Selected filters" className="selected-filter-pills">
+                {selectedFilterPills.map(({ label, onRemove }) => (
+                  <button
+                    className="selected-filter-pill"
+                    key={label}
+                    onClick={onRemove}
+                    type="button"
+                  >
+                    <span>{label}</span>
+                    <span aria-hidden="true">x</span>
+                    <span className="sr-only">Remove {label} filter</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         )}
         {!activeProduct && (
           <>
